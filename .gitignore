@@ -1,0 +1,70 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/
+pip-log.txt
+pip-delete-this-check.txt
+status.txt
+eb-activity.log
+*.manifest
+*.spec
+
+# Ambientes Virtuais (Crucial)
+.venv/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Django local / banco de dados sqlite local se houver
+db.sqlite3
+db.sqlite3-journal
+media/
+staticfiles/
+
+# Variáveis de Ambiente (Segurança - NUNCA COMMITE .ENV)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Docker logs
+.docker/
+*.log
+
+# IDEs e Editores
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# Node / Frontend (Para quando iniciarmos o React na quinta-feira)
+node_modules/
+/dist
+.eslintcache
+.stylelintcache
+.prettiercache
+.parcel-cache
+.next/
+.nuxt/
+.vercel
