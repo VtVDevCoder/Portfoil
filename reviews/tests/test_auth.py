@@ -4,9 +4,11 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
 
+
 @pytest.fixture
 def api_client():
     return APIClient()
+
 
 @pytest.mark.django_db
 def test_user_registration(api_client):
@@ -20,10 +22,12 @@ def test_user_registration(api_client):
     assert response.status_code == status.HTTP_201_CREATED
     assert User.objects.filter(username="testuser").exists()
 
+
 @pytest.mark.django_db
 def test_user_login_returns_jwt_tokens(api_client):
-    User.objects.create_user(username="loginuser", email="loginuser@example.com", password="password123")
-    
+    User.objects.create_user(
+        username="loginuser", email="loginuser@example.com", password="password123")  # noqa: E501
+
     url = reverse('token_obtain_pair')
     data = {
         "username": "loginuser",
