@@ -1,4 +1,4 @@
-from .models import FeedbackBatch, FeedbackItem
+from .models import FeedbackBatch, FeedbackItem, AnalysisResult
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
@@ -20,18 +20,26 @@ class RegisterSerializer(serializers.ModelSerializer):
         fields = ('username', 'email', 'password')
 
     def create(self, validated_data):
-        user = User.objects.create_user(
+        return User.objects.create_user(
             username=validated_data['username'],
             email=validated_data['email'],
             password=validated_data['password']
         )
-        return user
+
+
+class AnalysisResultSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AnalysisResult
+        fields = ['sentiment', 'category',
+                  'urgency_score', 'summary', 'processed_at']
 
 
 class FeedbackItemSerializer(serializers.ModelSerializer):
+    analysis = AnalysisResultSerializer(read_only=True)
+
     class Meta:
         model = FeedbackItem
-        fields = ['id', 'raw_text', 'status']
+        fields = ['id', 'raw_text', 'status', 'analysis']
 
 
 class FeedbackBatchSerializer(serializers.ModelSerializer):
@@ -51,13 +59,9 @@ class FeedbackBatchSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         raw_text_list = validated_data.pop('raw_text_list')
         user = self.context['request'].user
-
-        # Cria o lote principal
         batch = FeedbackBatch.objects.create(user=user, is_processed=False)
-
-        # Cria todos os itens pendentes vinculados a este lote
-        for text in raw_text_list:
-            FeedbackItem.objects.create(
-                batch=batch, raw_text=text, status='PENDING')
-
+        FeedbackItem.objects.bulk_create([
+            FeedbackItem(batch=batch, raw_text=text, status='PENDING')
+            for text in raw_text_list
+        ])
         return batch
