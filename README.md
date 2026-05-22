@@ -6,21 +6,25 @@ B2B SaaS platform for AI-powered customer feedback analysis. Upload batches of r
 
 ## Architecture
 
-┌──────────────┐ HTTP/JWT ┌──────────────────┐ Celery task ┌──────────────┐
-│ React 18 │ ─────────────▶ │ Django REST API │ ───────────────▶ │ Celery Worker│
-│ TypeScript │ │ Simple JWT Auth │ │ (background) │
-│ Recharts │ │ Port 8000 │ └──────┬───────┘
-│ Port 3000 │ └────────┬──────────┘ │
-└──────────────┘ │ │
-┌─────────▼──────────┐ ┌───────────▼────────┐
-│ PostgreSQL 15 │ │ Gemini 1.5 Flash │
-│ (persistent data) │ │ Structured Output │
-└─────────────────────┘ └────────────────────┘
-│
-┌─────────▼──────────┐
-│ Redis 7 │
-│ (task queue) │
-└─────────────────────┘
+## Architecture
+
+<!-- prettier-ignore-start -->
+┌──────────────┐    HTTP/JWT ┌──────────────────┐ Celery task ┌──────────────┐
+│ React 18     │ ──────────▶ │ Django REST API  │ ──────────▶ │ Celery Worker│
+│ TypeScript   │             │ Simple JWT Auth  │             │ (background) │
+│ Recharts     │             │ Port 8000        │             └──────┬───────┘
+│ Port 3000    │             └────────┬─────────┘                    │
+└──────────────┘                      │                              │
+                            ┌─────────▼──────────┐       ┌───────────▼────────┐
+                            │ PostgreSQL 15      │       │ Gemini 1.5 Flash   │
+                            │ (persistent data)  │       │ Structured Output  │
+                            └────────────────────┘       └────────────────────┘
+                                      │
+                            ┌─────────▼──────────┐
+                            │ Redis 7            │
+                            │ (task queue)       │
+                            └────────────────────┘
+<!-- prettier-ignore-end -->
 
 | Layer          | Technology                                                           |
 | -------------- | -------------------------------------------------------------------- |
