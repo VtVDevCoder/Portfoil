@@ -1,0 +1,9 @@
+[run]
+omit =
+    manage.py
+    core/wsgi.py
+    core/asgi.py
+    core/__init__.py
+    reviews/migrations/*
+    reviews/apps.py
+    reviews/admin.py
